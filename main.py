@@ -4,6 +4,8 @@ import core
 from parsers.parser import Parser
 from analyzers.analyzer import Analyzer
 
+from helpers.utils import save_results
+
 
 if __name__ == "__main__":
 
@@ -15,10 +17,11 @@ if __name__ == "__main__":
 
     try:
 
-        parser = Parser.handler()
-        an = Analyzer.handler(parser.clean_text)
+        text_analyzer = Analyzer.handler(Parser.handler())
 
-        print(an.word_counts[:10])
+        print(text_analyzer.word_counts[:10])
 
+        save_results(text_analyzer.word_counts)
     except Exception as e:
+        print(e)
         print("Error while to complete the process")

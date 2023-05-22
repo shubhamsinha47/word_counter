@@ -11,10 +11,6 @@ class ParserInterface(ABC):
 
     """
 
-    def __init__(self):
-
-        self.clean_text: str | None = None
-
     @abstractmethod
     def get_data_source(self):
 
@@ -22,10 +18,5 @@ class ParserInterface(ABC):
 
     @abstractmethod
     def extract_text(self):
-
-        raise NotImplementedError
-
-    @abstractmethod
-    def clean_row_text(self):
 
         raise NotImplementedError

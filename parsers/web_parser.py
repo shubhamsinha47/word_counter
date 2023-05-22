@@ -1,12 +1,19 @@
 import re
-import string
 import logging
 import requests
 
+from parsers.cleaner import HTMLCleaner
 from parsers.parser_interface import ParserInterface
 
 
 class WebParser(ParserInterface):
+
+    """
+
+        This is web parser, this call will take url and input from
+        user and try to extract the text from the given URL.
+
+    """
 
     __logger = logging.getLogger(__name__)
 
@@ -19,6 +26,15 @@ class WebParser(ParserInterface):
 
     def get_data_source(self, message: str = "Enter WEB URL:: "):
 
+        """
+
+            This method will try to get source url from user
+
+            :param message:
+            :return:
+
+        """
+
         try:
 
             self.source = input(message)
@@ -30,6 +46,15 @@ class WebParser(ParserInterface):
             raise Exception
 
     def validater(self):
+
+        """
+
+            This method will try to validate the user input and check
+            if the provided input is a valid URL or not
+
+            :return:
+
+        """
 
         try:
 
@@ -51,6 +76,14 @@ class WebParser(ParserInterface):
 
     def extract_text(self):
 
+        """
+
+            This method will try to extract the text form the provided URL
+
+            :return:
+
+        """
+
         try:
 
             response = requests.get( url = self.source )
@@ -59,7 +92,7 @@ class WebParser(ParserInterface):
 
                 self.row_text = response.text
 
-            if response.status_code == 404:
+            if not response.status_code == 200:
 
                 raise Exception("Data not found")
 
@@ -68,40 +101,23 @@ class WebParser(ParserInterface):
 
             raise Exception
 
-    def clean_row_text(self):
-
-        if self.row_text:
-
-            self.remove_html_tags().remove_punctuation().remove_extra_space()
-
-        return self
-
-    def remove_html_tags(self):
-
-        self.clean_text = re.sub('<.*?>', '', self.row_text)
-
-        return self
-
-    def remove_punctuation(self):
-
-        self.clean_text = self.clean_text.translate(str.maketrans('', '', string.punctuation))
-
-        return self
-
-    def remove_extra_space(self):
-
-        self.clean_text = " ".join(self.clean_text.strip().split())
-
-        return self
-
     @staticmethod
     def handler():
 
+        """
+
+            This function will handle the process of text
+            extraction from the user provided URL.
+
+            :return:
+
+        """
+
         try:
 
-            parser = WebParser().get_data_source().extract_text().clean_row_text()
-
-            return parser
+            parser = WebParser().get_data_source().extract_text()
+            clean_text = HTMLCleaner.clean(parser.row_text)
+            return clean_text
 
         except Exception as e:
 
