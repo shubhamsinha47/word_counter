@@ -13,3 +13,8 @@ python main.py
 ``
 
 ## .env file is required with the values defined in sample.env
+
+# Test
+``
+python -m unittest test/python_base_analyzer_test.py
+``
