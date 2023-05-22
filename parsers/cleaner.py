@@ -75,6 +75,6 @@ class HTMLCleaner(Cleaner):
                                  flags=re.DOTALL)
         self.clean_text = re.sub(r'<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>', '', self.clean_text,
                                  flags=re.DOTALL)
-        self.clean_text = re.sub('<.*?>', '', self.clean_text)
+        self.clean_text = re.sub('<.*?>', ' ', self.clean_text)
 
         return self
